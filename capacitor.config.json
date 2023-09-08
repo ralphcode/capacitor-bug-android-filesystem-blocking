@@ -1,0 +1,8 @@
+{
+  "appId": "com.example.app",
+  "appName": "capacitor-bug-android-filesystem-blocking",
+  "bundledWebRuntime": false,
+  "webDir": "src",
+  "plugins": {},
+  "loggingBehavior": "debug"
+}

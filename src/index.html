@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Awesome Capacitor App</title>
+    <meta
+      name="viewport"
+      content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            overflow: hidden; /* To avoid any unnecessary scroll bars */
+        }
+
+        #logs {
+            width: 100%;
+            height: 100%;
+            border: none;
+            margin: 0;
+            padding: 0;
+            resize: none; /* Prevents user from resizing the textarea */
+            box-sizing: border-box; /* Ensures padding and border don't increase the element's total width/height */
+        }
+    </style>
+  </head>
+  <body>
+    <textarea id="logs"></textarea>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const logs = document.querySelector('#logs');
+        const logger = (log) => {
+          console.log(log);
+          logs.value += `${log}\n`;
+        }
+        logger('Loading...');
+        Capacitor.Plugins.Filesystem.addListener('progress', (progress) => logger(`downloadFile: Progress: ${(progress.bytes / progress.contentLength).toFixed(2)}%`));
+        logger('downloadFile: Starting');
+        Capacitor.Plugins.Filesystem.downloadFile({
+          progress: true, recursive: true,
+          path: `${(+new Date())}.zip`,
+          url: 'https://sample-videos.com/img/Sample-jpg-image-5mb.jpg', // i.e. 5mb
+          directory: 'CACHE'
+        }).then(res => logger('downloadFile: Complete'), (error) => logger(`downloadFile: ERROR: ${error.message}`));
+        logger('getInfo: Starting any other request');
+        Capacitor.Plugins.App.getInfo().then(res => logger(`getInfo: this is blocked until download completes: ${res.id}`), (error) => logger(`getInfo: ERROR: ${error.message}`));
+      });
+    </script>
+  </body>
+</html>
