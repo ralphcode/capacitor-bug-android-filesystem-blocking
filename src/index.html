@@ -41,7 +41,7 @@
           logs.value += `${log}\n`;
         }
         logger('Loading...');
-        Capacitor.Plugins.Filesystem.addListener('progress', (progress) => logger(`downloadFile: Progress: ${(progress.bytes / progress.contentLength).toFixed(2)}%`));
+        Capacitor.Plugins.Filesystem.addListener('progress', (progress) => logger(`downloadFile: Progress: ${((progress.bytes / progress.contentLength) * 100).toFixed(0)}%`));
         logger('downloadFile: Starting');
         Capacitor.Plugins.Filesystem.downloadFile({
           progress: true, recursive: true,
